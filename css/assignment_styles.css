@@ -9,3 +9,21 @@ body {
   border: 2px solid black;
   padding: 1em;
 }
+
+.collectionItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.collectionItem:hover {
+  cursor: pointer;
+}
+.itemImage {
+  flex:1;
+}
+
+.itemInfo {
+  flex: 4;
+}
