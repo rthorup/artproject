@@ -1,4 +1,5 @@
 'use strict';
+//tracking time to load/sort data;
 var start = new Date().getTime();
 console.log(start);
 // //declaring arrays to capture data
@@ -25,29 +26,62 @@ window.onload = function() {
 				let keywordArray = item.Keywords.split(',');
 				let courseArray = item.CourseCodeAndNumber.split(',');
 				let activityArray = item.ActivityType.split(',');
-
+				//loading all array items into temp array and trimming the extra white space before some of the entries
 				skillsArray.forEach((item) => {
-					tempSkillsArray.push(item);
+					tempSkillsArray.push(item.trim());
 				})
 				keywordArray.forEach((item) => {
-					tempKeywordArray.push(item);
+					tempKeywordArray.push(item.trim());
 				})
 				courseArray.forEach((item) => {
-					tempCourseArray.push(item);
+					tempCourseArray.push(item.trim());
 				})
 				activityArray.forEach((item) => {
-					tempActivityArray.push(item);
+					tempActivityArray.push(item.trim());
 				})
 			})
+			//sort the resulting data alphabetically after removing duplicates.
 			skills = removeDuplicates(tempSkillsArray).sort();
 			keywords = removeDuplicates(tempKeywordArray).sort();
 			course = removeDuplicates(tempCourseArray).sort();
 			activity = removeDuplicates(tempActivityArray).sort();
 			console.log(new Date().getTime() - start);
+		}).then(() => {
+			//capturing arrays to insert into autocomplete search;
+			let searchSkillList = skills;
+			let searchKeywordList = keywords;
+			let searchCourseList = course;
+			let searchActivityList = activity;
+			//attaching lists to each autocomplete search
+			$('#autocompleteSkills').autocomplete({
+				lookup: searchSkillList,
+				onSelect: function(suggestion) {
+					console.log('You selected: ' + suggestion.value);
+				}
+			});
+			$('#autocompleteKeywords').autocomplete({
+				lookup: searchKeywordList,
+				onSelect: function(suggestion) {
+					console.log('You selected: ' + suggestion.value);
+				}
+			});
+			$('#autocompleteCourse').autocomplete({
+				lookup: searchCourseList,
+				onSelect: function(suggestion) {
+					console.log('You selected: ' + suggestion.value);
+				}
+			});
+			$('#autocompleteActivity').autocomplete({
+				lookup: searchActivityList,
+				onSelect: function(suggestion) {
+					console.log('You selected: ' + suggestion.value);
+				}
+			});
 		})
 		.catch(function(error) {
+			//if there is a problem with the page, display error.
 			console.log(error);
-			alert('Sorry, we could not find any assignments at this time')
+			alert('Sorry, we could not find any assignments at this time. Please try again in a few minutes.')
 		});
 }
 //function to remove duplicate entries from data;
@@ -81,12 +115,16 @@ function createDiv(item) {
 let newView = document.getElementById('submitCall');
 //function set to get search criteria
 newView.addEventListener('click', function() {
+	//clearing previous results if any
+	resetPage();
 	//getting data from select fields
-	let activityType = document.getElementById('activityType').value;
-	let skillType = document.getElementById('skillType').value;
+	let skillType = document.getElementById('autocompleteSkills').value;
+	let keywordType = document.getElementById('autocompleteKeywords').value;
+	let courseType = document.getElementById('autocompleteCourse').value;
+	let activityType = document.getElementById('autocompleteActivity').value;
 	//declaring the array to put matching criteria
 	let activityDisplay = []
-	//looping through our data to check for mathing items
+	//looping through our data to check for mathing items/accounting for any NULL values
 	for (let i = 0; i < assignmentData.length; i++) {
 		if (assignmentData[i].ActivityType === null) {
 			assignmentData[i].ActivityType = "N/A";
@@ -94,27 +132,32 @@ newView.addEventListener('click', function() {
 		if (assignmentData[i].Skills === null) {
 			assignmentData[i].Skills = "N/A";
 		}
-		if ((assignmentData[i].ActivityType.includes(activityType)) && (assignmentData[i].Skills.includes(skillType))) {
+		if ((assignmentData[i].ActivityType.includes(activityType)) && (assignmentData[i].Skills.includes(skillType)) && (assignmentData[i].CourseCodeAndNumber.includes(courseType)) && (assignmentData[i].Keywords.includes(keywordType))) {
 			activityDisplay.push(assignmentData[i]);
 		}
 	}
 	if (activityDisplay.length === 0) {
 		//if no matches, display warning
-		alert('Sorry, no matching criteria');
+		alert('Sorry, no matching results for your criteria. Please try again.');
 	} else {
 		//creating a new div for each matching criteria
 		activityDisplay.forEach(initPage);
 	}
-	//resetting fields for possible search
 
 });
 
 let resetSearch = document.getElementById('resetSearch');
 resetSearch.addEventListener('click', function() {
-	document.getElementById('activityType').value = "";
+	document.getElementById('autocompleteSkills').value = "";
+	document.getElementById('autocompleteKeywords').value = "";
+	document.getElementById('autocompleteCourse').value = "";
+	document.getElementById('autocompleteActivity').value = "";
+	resetPage();
+});
+
+function resetPage() {
 	let divs = document.querySelectorAll('.assignmentBox');
-	console.log(divs[0]);
 	for (let i = 0; i < divs.length; i++) {
 		divs[i].parentNode.removeChild(divs[i]);
 	}
-});
+}
