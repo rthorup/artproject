@@ -15,6 +15,8 @@ window.onload = function() {
 		.then(function(response) {
 			//main data
 			assignmentData = response.data;
+
+
 			//breaking down list items programmatically
 			let tempSkillsArray = [];
 			let tempKeywordArray = [];
@@ -22,23 +24,37 @@ window.onload = function() {
 			let tempActivityArray = [];
 			//breaking the strings into array items
 			assignmentData.forEach((item) => {
-				let skillsArray = item.Skills.split(',');
-				let keywordArray = item.Keywords.split(',');
-				let courseArray = item.CourseCodeAndNumber.split(',');
-				let activityArray = item.ActivityType.split(',');
-				//loading all array items into temp array and trimming the extra white space before some of the entries
-				skillsArray.forEach((item) => {
-					tempSkillsArray.push(item.trim());
-				})
-				keywordArray.forEach((item) => {
-					tempKeywordArray.push(item.trim());
-				})
-				courseArray.forEach((item) => {
-					tempCourseArray.push(item.trim());
-				})
-				activityArray.forEach((item) => {
-					tempActivityArray.push(item.trim());
-				})
+				//checking for null variables in each object.
+				let flag = true;
+				for (var key in item) {
+					if (item[key] === null) {
+						flag = false;
+						break;
+					}
+				}
+				if (flag === false) {
+					//breaks out of forEach if any value is null
+					return
+				} else {
+					//go ahead and process everything you need to.
+					let skillsArray = item.Skills.split(',');
+					let keywordArray = item.Keywords.split(',');
+					let courseArray = item.CourseCodeAndNumber.split(',');
+					let activityArray = item.ActivityType.split(',');
+					//loading all array items into temp array and trimming the extra white space before some of the entries
+					skillsArray.forEach((item) => {
+						tempSkillsArray.push(item.trim());
+					})
+					keywordArray.forEach((item) => {
+						tempKeywordArray.push(item.trim());
+					})
+					courseArray.forEach((item) => {
+						tempCourseArray.push(item.trim());
+					})
+					activityArray.forEach((item) => {
+						tempActivityArray.push(item.trim());
+					})
+				}
 			})
 			//sort the resulting data alphabetically after removing duplicates.
 			skills = removeDuplicates(tempSkillsArray).sort();
@@ -127,10 +143,16 @@ newView.addEventListener('click', function() {
 	//looping through our data to check for mathing items/accounting for any NULL values
 	for (let i = 0; i < assignmentData.length; i++) {
 		if (assignmentData[i].ActivityType === null) {
-			assignmentData[i].ActivityType = "N/A";
+			continue;
 		}
 		if (assignmentData[i].Skills === null) {
-			assignmentData[i].Skills = "N/A";
+			continue;
+		}
+		if (assignmentData[i].CourseCodeAndNumber === null) {
+			continue;
+		}
+		if (assignmentData[i].Keywords === null) {
+			continue;
 		}
 		if ((assignmentData[i].ActivityType.includes(activityType)) && (assignmentData[i].Skills.includes(skillType)) && (assignmentData[i].CourseCodeAndNumber.includes(courseType)) && (assignmentData[i].Keywords.includes(keywordType))) {
 			activityDisplay.push(assignmentData[i]);
