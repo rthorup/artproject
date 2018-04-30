@@ -15,8 +15,6 @@ window.onload = function() {
 		.then(function(response) {
 			//main data
 			assignmentData = response.data;
-
-
 			//breaking down list items programmatically
 			let tempSkillsArray = [];
 			let tempKeywordArray = [];
@@ -69,29 +67,22 @@ window.onload = function() {
 			let searchCourseList = course;
 			let searchActivityList = activity;
 			//attaching lists to each autocomplete search
+			//if you need more info, check the autocmplete.js file for code base
 			$('#autocompleteSkills').autocomplete({
 				lookup: searchSkillList,
-				onSelect: function(suggestion) {
-					console.log('You selected: ' + suggestion.value);
-				}
+				onSelect: function(suggestion) {}
 			});
 			$('#autocompleteKeywords').autocomplete({
 				lookup: searchKeywordList,
-				onSelect: function(suggestion) {
-					console.log('You selected: ' + suggestion.value);
-				}
+				onSelect: function(suggestion) {}
 			});
 			$('#autocompleteCourse').autocomplete({
 				lookup: searchCourseList,
-				onSelect: function(suggestion) {
-					console.log('You selected: ' + suggestion.value);
-				}
+				onSelect: function(suggestion) {}
 			});
 			$('#autocompleteActivity').autocomplete({
 				lookup: searchActivityList,
-				onSelect: function(suggestion) {
-					console.log('You selected: ' + suggestion.value);
-				}
+				onSelect: function(suggestion) {}
 			});
 		})
 		.catch(function(error) {
@@ -140,7 +131,7 @@ newView.addEventListener('click', function() {
 	let activityType = document.getElementById('autocompleteActivity').value;
 	//declaring the array to put matching criteria
 	let activityDisplay = []
-	//looping through our data to check for mathing items/accounting for any NULL values
+	//looping through our data to check for matching items/accounting for any NULL values
 	for (let i = 0; i < assignmentData.length; i++) {
 		if (assignmentData[i].ActivityType === null) {
 			continue;
@@ -159,8 +150,8 @@ newView.addEventListener('click', function() {
 		}
 	}
 	if (activityDisplay.length === 0) {
-		//if no matches, display warning
-		alert('Sorry, no matching results for your criteria. Please try again.');
+		//if no matches, display modal
+		$('#noResultsMessage').modal('toggle')
 	} else {
 		//creating a new div for each matching criteria
 		activityDisplay.forEach(initPage);
