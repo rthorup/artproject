@@ -26,6 +26,7 @@ window.onload = function() {
 				let flag = true;
 				for (var key in item) {
 					if (item[key] === null) {
+						console.log("this is null");
 						flag = false;
 						break;
 					}

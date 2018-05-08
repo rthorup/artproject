@@ -11,23 +11,31 @@ body {
 }
 
 .collectionItem {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
+  border: 2px solid black;
+  max-width: 85%;
 }
 
 .collectionItem:hover {
   cursor: pointer;
 }
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .itemImage {
   flex:1;
+  max-width: 350px;
+  max-height: 350px;
 }
 
-.itemInfo {
-  flex: 4;
+.artistInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-
 .autocomplete-suggestions { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; border: 1px solid #999; background: #FFF; cursor: default; overflow: auto; -webkit-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64); -moz-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64); box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64); }
 .autocomplete-suggestion {   display: -ms-flexbox;
   display: flex;
