@@ -3,7 +3,7 @@
 var start = new Date().getTime();
 console.log(start);
 // //declaring arrays to capture data
-let assignmentData = [];
+let assignmentData = {};
 let skills = [];
 let keywords = [];
 let activity = [];
@@ -18,12 +18,11 @@ window.onload = function() {
 			//main data
 			assignmentData = response.data;
 			//breaking down list items programmatically
-			let tempSkillsArray = [];
-			let tempKeywordArray = [];
-			let tempActivityArray = [];
-			let tempDepartmentArray = [];
-			let tempLevelArray = [];
-			let classSize = [];
+			const tempSkillsArray = [];
+			const tempKeywordArray = [];
+			const tempActivityArray = [];
+			const tempLevelArray = [];
+			const classSize = [];
 			//breaking the strings into array items
 			assignmentData.forEach((item) => {
 				//checking for null variables in each object.
@@ -42,7 +41,6 @@ window.onload = function() {
 					let skillsArray = item.Skills.split(',');
 					let keywordArray = item.Keywords.split(',');
 					let activityArray = item.ActivityType.split(',');
-					let departmentArray = item.SchoolDepartment.split(',');
 					let levelArray = item.AcademicLevel.split(',');
 					classSize.push(item.ClassSize.trim());
 
@@ -56,9 +54,6 @@ window.onload = function() {
 					activityArray.forEach((item) => {
 						tempActivityArray.push(item.trim());
 					})
-					departmentArray.forEach((item) => {
-						tempDepartmentArray.push(item.trim());
-					})
 					levelArray.forEach((item) => {
 						tempLevelArray.push(item.trim());
 					})
@@ -68,7 +63,6 @@ window.onload = function() {
 			skills = removeDuplicates(tempSkillsArray).sort();
 			keywords = removeDuplicates(tempKeywordArray).sort();
 			activity = removeDuplicates(tempActivityArray).sort();
-			department = removeDuplicates(tempDepartmentArray).sort();
 			level = removeDuplicates(tempLevelArray).sort();
 			size = removeDuplicates(classSize).sort();
 			console.log(new Date().getTime() - start);
@@ -77,7 +71,6 @@ window.onload = function() {
 			let searchSkillList = skills;
 			let searchKeywordList = keywords;
 			let searchActivityList = activity;
-			let searchDepartmentList = department;
 			let searchLevelList = level;
 			let searchSizeList = size;
 			//attaching lists to each autocomplete search
@@ -94,11 +87,6 @@ window.onload = function() {
 			});
 			$('#autocompleteActivity').autocomplete({
 				lookup: searchActivityList,
-				minChars: 0,
-				onSelect: function(suggestion) {}
-			});
-			$('#autocompleteDepartment').autocomplete({
-				lookup: searchDepartmentList,
 				minChars: 0,
 				onSelect: function(suggestion) {}
 			});
@@ -141,12 +129,21 @@ const initPage = function(item) {
 //function to template divs with assignment data
 function createDiv(item) {
 	return `
-		<a href='http://spencerdev.dept.ku.edu/assignment?value=${item.ExhibitionName}' target="_blank"><h1>${item.ExhibitionName}</h1></a>
-		<h4>${item.AssignmentDescription}</h4>
-		<h5><strong>Activity Type:</strong> ${item.ActivityType}</h5>
-		<h5><strong>Keywords:</strong> ${item.Keywords}</h5>
-		<h5><strong>Department:</strong> ${item.SchoolDepartment}</h5>
-		<h5><strong>Academic Level:</strong> ${item.AcademicLevel}</h5>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-auto imageContainer p-3 m-3">
+				<img src=https://dept.ku.edu/~smamobile/oai/download/asset/bigger/${item.ObjID} class="itemImage" alt="${item.ExhibitionName} Assignment Main Image">
+			</div>
+			<div class="col-lg p-3">
+					<a href='http://spencerdev.dept.ku.edu/assignment?value=${item.ExhibitionName}' target="_blank"><h2>${item.ExhibitionName}</h2></a>
+					<h5>${item.AssignmentDescription}</h5>
+					<h5><strong>Activity Type:</strong> ${item.ActivityType}</h5>
+					<h5><strong>Keywords:</strong> ${item.Keywords}</h5>
+					<h5><strong>Department:</strong> ${item.SchoolDepartment}</h5>
+					<h5><strong>Academic Level:</strong> ${item.AcademicLevel}</h5>
+			</div>
+		</div>
+	</div>
 	`
 }
 
@@ -157,7 +154,6 @@ newView.addEventListener('click', function() {
 	let skillType = document.getElementById('autocompleteSkills').value;
 	let keywordType = document.getElementById('autocompleteKeywords').value;
 	let activityType = document.getElementById('autocompleteActivity').value;
-	let departmentType = document.getElementById('autocompleteDepartment').value;
 	let levelType = document.getElementById('autocompleteLevel').value;
 	let sizeType = document.getElementById('autocompleteSize').value;
 	//clearing previous results if any
@@ -184,7 +180,7 @@ newView.addEventListener('click', function() {
 		if (assignmentData[i].ClassSize === null) {
 			continue;
 		}
-		if ((assignmentData[i].ActivityType.includes(activityType)) && (assignmentData[i].Skills.includes(skillType)) && (assignmentData[i].Keywords.includes(keywordType)) && (assignmentData[i].AcademicLevel.includes(levelType)) && (assignmentData[i].SchoolDepartment.includes(departmentType)) && (assignmentData[i].ClassSize.includes(sizeType))) {
+		if ((assignmentData[i].ActivityType.includes(activityType)) && (assignmentData[i].Skills.includes(skillType)) && (assignmentData[i].Keywords.includes(keywordType)) && (assignmentData[i].AcademicLevel.includes(levelType)) && (assignmentData[i].ClassSize.includes(sizeType))) {
 			activityDisplay.push(assignmentData[i]);
 		}
 	}
@@ -207,7 +203,6 @@ function resetPage() {
 	document.getElementById('autocompleteSkills').value = "";
 	document.getElementById('autocompleteKeywords').value = "";
 	document.getElementById('autocompleteActivity').value = "";
-	document.getElementById('autocompleteDepartment').value = "";
 	document.getElementById('autocompleteLevel').value = "";
 	document.getElementById('autocompleteSize').value = "";
 	let divs = document.querySelectorAll('.assignmentBox');

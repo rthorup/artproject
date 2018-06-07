@@ -1,22 +1,56 @@
 body {
-  background-color: #cbd0d8;
-}
-
-.assignmentBox {
-  width: 75%;
-  margin: 2em auto;
   background-color: white;
-  border: 2px solid black;
-  padding: 1em;
+  font-family: Helvetica, sans-serif;
+  color: #323232;
 }
 
-.collectionItem {
-  border: 2px solid black;
-  max-width: 85%;
+a {
+  color: #323232;
+}
+
+a:visited {
+  color: #323232;
+}
+
+a:hover {
+  color: #323232;
+}
+
+.navbar {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0;
+  background-color: white;
+  box-shadow: 0 5px 5px 0 rgba(0,0,0,0.1);
+  padding-bottom: 1.8rem;
+}
+
+.navbar-brand {
+  margin: 0;
+  padding: 0;
+}
+
+.logo {
+  height: 5rem;
+  min-width: 128px;
+  max-height: 100%;
+  max-width: 100%;
+  margin-top: .2rem;
+  margin-left: .65rem;
+}
+.assignmentBox {
+  width: 80%;
+  margin: auto;
+  border-top: 1px solid grey;
 }
 
 .collectionItem:hover {
   cursor: pointer;
+}
+
+.btn {
+  border-radius: 0 !important;
 }
 
 .imageContainer {
@@ -25,9 +59,9 @@ body {
   align-items: center;
 }
 .itemImage {
-  flex:1;
-  max-width: 350px;
-  max-height: 350px;
+  /*flex:1;*/
+  max-width: 300px;
+  max-height: 300px;
 }
 
 .artistInfo {
@@ -35,8 +69,9 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: left;
 }
-.autocomplete-suggestions { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; border: 1px solid #999; background: #FFF; cursor: default; overflow: auto; -webkit-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64); -moz-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64); box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64); }
+.autocomplete-suggestions { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; border: 1px solid #999; background: #FFF; cursor: default; overflow: auto; }
 .autocomplete-suggestion {   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
@@ -50,8 +85,8 @@ body {
   text-align: center;
   white-space: nowrap;
   background-color: #e9ecef;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem; }
+  border: 1px solid #787878;
+ }
 .autocomplete-no-suggestion {   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
@@ -65,9 +100,9 @@ body {
   text-align: center;
   white-space: nowrap;
   background-color: #e9ecef;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;}
-.autocomplete-selected { background: #F0F0F0; }
+  border: 2px solid #787878;
+}
+.autocomplete-selected { background: #F0F0F0; cursor: pointer; }
 .autocomplete-suggestions strong { font-weight: bold; color: #000; }
 .autocomplete-group { padding: 2px 5px; font-weight: bold; font-size: 16px; color: #000; display: block; border-bottom: 1px solid #000; }
 
@@ -76,5 +111,41 @@ body {
 input {
   font-size: 1rem;
   padding: .2rem;
-  width: 75%;
+  border: 1px solid #787878;
+  width: 90%;
+}
+
+
+
+@media (max-width:1024px) {
+
+}
+
+@media (max-width:768px) {
+  .navbar {
+    margin-top: .45rem;
+    margin-left: .02rem;
+  }
+  .logo {
+    height: 5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    box-shadow: none;
+    padding-bottom: 0;
+  }
+  .logo {
+    height: 3.4rem;
+    min-width: 0;
+  }
+  .assignmentBox {
+    width: 95%;
+  }
+}
+
+@media (max-width:320px) {
+}
+
 }
