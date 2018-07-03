@@ -1,7 +1,13 @@
 body {
+  box-sizing: border-box;
   background-color: white;
   font-family: Helvetica, sans-serif;
   color: #323232;
+}
+
+p {
+  font-size: 1.1rem;
+  font-weight: 200;
 }
 
 a {
@@ -68,9 +74,8 @@ a:hover {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  text-align: left;
 }
+
 .autocomplete-suggestions { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; border: 1px solid #999; background: #FFF; cursor: default; overflow: auto; }
 .autocomplete-suggestion {   display: -ms-flexbox;
   display: flex;
@@ -115,8 +120,28 @@ input {
   width: 90%;
 }
 
+.info-box {
+  width: 80%;
+  margin: auto;
+  border-top: 2px solid #323232;
+}
 
+.nav-link {
 
+}
+
+.contact-info {
+  /* border-bottom: 1px solid white; */
+  font-weight: bold;
+  font-style: italic;
+}
+
+.scrollTop {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 50px;
+}
 @media (max-width:1024px) {
 
 }

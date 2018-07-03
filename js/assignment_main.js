@@ -7,10 +7,8 @@ let assignmentData = {};
 let skills = [];
 let keywords = [];
 let activity = [];
-let department = [];
 let size = [];
-let level = [];
-
+let level = ["Introductory Undergraduate", "Advanced Undergraduate", "Graduate"];
 //pulling in json data to work with on page load.
 window.onload = function() {
 	axios.get('http://spencerdev.dept.ku.edu/RJT')
@@ -21,7 +19,6 @@ window.onload = function() {
 			const tempSkillsArray = [];
 			const tempKeywordArray = [];
 			const tempActivityArray = [];
-			const tempLevelArray = [];
 			const classSize = [];
 			//breaking the strings into array items
 			assignmentData.forEach((item) => {
@@ -41,7 +38,6 @@ window.onload = function() {
 					let skillsArray = item.Skills.split(',');
 					let keywordArray = item.Keywords.split(',');
 					let activityArray = item.ActivityType.split(',');
-					let levelArray = item.AcademicLevel.split(',');
 					classSize.push(item.ClassSize.trim());
 
 					//loading all array items into temp array and trimming the extra white space before some of the entries
@@ -54,16 +50,12 @@ window.onload = function() {
 					activityArray.forEach((item) => {
 						tempActivityArray.push(item.trim());
 					})
-					levelArray.forEach((item) => {
-						tempLevelArray.push(item.trim());
-					})
 				}
 			})
 			//sort the resulting data alphabetically after removing duplicates.
 			skills = removeDuplicates(tempSkillsArray).sort();
 			keywords = removeDuplicates(tempKeywordArray).sort();
 			activity = removeDuplicates(tempActivityArray).sort();
-			level = removeDuplicates(tempLevelArray).sort();
 			size = removeDuplicates(classSize).sort();
 			console.log(new Date().getTime() - start);
 		}).then(() => {
@@ -117,6 +109,37 @@ function removeDuplicates(arr) {
 	}
 	return filteredList;
 }
+//scroll to top feature.
+let topScroll = document.getElementById('topScroll').addEventListener("click", ()=> {
+	document.body.scrollTop = 50; // For Safari
+  document.documentElement.scrollTop = 50; // For Chrome, Firefox, IE and Opera
+})
+window.onscroll = function() {scrollFunction()};
+function scrollFunction() {
+    if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+			document.getElementById('topScroll').style.display = "block";
+    } else {
+      document.getElementById('topScroll').style.display = "none";
+    }
+}
+
+
+let resultView = document.getElementById('results');
+const initResult = function() {
+	let markup = createResults();
+	let container = document.createElement("div");
+	container.innerHTML = markup;
+	resultView.appendChild(container);
+}
+
+function createResults() {
+	return`
+	<div class="container resultBox">
+		<h2 class="ml-3">Results: ${results}</h2>
+	</div>
+	`
+}
+
 //make a div to put in assignment data and then append it to the dom
 let post = document.getElementById('post');
 const initPage = function(item) {
@@ -131,10 +154,10 @@ function createDiv(item) {
 	return `
 	<div class="container">
 		<div class="row">
-			<div class="col-md-auto imageContainer p-3 m-3">
+			<div class="col-lg-4 imageContainer p-3 m-3">
 				<img src=https://dept.ku.edu/~smamobile/oai/download/asset/bigger/${item.ObjID} class="itemImage" alt="${item.ExhibitionName} Assignment Main Image">
 			</div>
-			<div class="col-lg p-3">
+			<div class="col-lg-7 p-3">
 					<a href='http://spencerdev.dept.ku.edu/assignment?value=${item.ExhibitionName}' target="_blank"><h2>${item.ExhibitionName}</h2></a>
 					<h5>${item.AssignmentDescription}</h5>
 					<h5><strong>Activity Type:</strong> ${item.ActivityType}</h5>
@@ -147,6 +170,8 @@ function createDiv(item) {
 	`
 }
 
+let results = 0;
+
 let newView = document.getElementById('submitCall');
 //function set to get search criteria
 newView.addEventListener('click', function() {
@@ -157,6 +182,7 @@ newView.addEventListener('click', function() {
 	let levelType = document.getElementById('autocompleteLevel').value;
 	let sizeType = document.getElementById('autocompleteSize').value;
 	//clearing previous results if any
+	results = 0;
 	resetPage();
 	//declaring the array to put matching criteria
 	let activityDisplay = []
@@ -189,6 +215,8 @@ newView.addEventListener('click', function() {
 		$('#noResultsMessage').modal('toggle')
 	} else {
 		//creating a new div for each matching criteria
+		results = activityDisplay.length;
+		initResult();
 		activityDisplay.forEach(initPage);
 	}
 
@@ -196,15 +224,23 @@ newView.addEventListener('click', function() {
 
 let resetSearch = document.getElementById('resetSearch');
 resetSearch.addEventListener('click', function() {
+	resetSearchBoxes();
 	resetPage();
 });
 
-function resetPage() {
+function resetSearchBoxes() {
 	document.getElementById('autocompleteSkills').value = "";
 	document.getElementById('autocompleteKeywords').value = "";
 	document.getElementById('autocompleteActivity').value = "";
 	document.getElementById('autocompleteLevel').value = "";
 	document.getElementById('autocompleteSize').value = "";
+}
+
+function resetPage() {
+	let searchDiv = document.querySelectorAll('.resultBox');
+	for (let i = 0; i < searchDiv.length; i++) {
+		searchDiv[i].parentNode.removeChild(searchDiv[i]);
+	}
 	let divs = document.querySelectorAll('.assignmentBox');
 	for (let i = 0; i < divs.length; i++) {
 		divs[i].parentNode.removeChild(divs[i]);
